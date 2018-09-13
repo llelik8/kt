@@ -197,13 +197,13 @@ fun main(args: Array<String>) {
 For non-propagating opt-in of the whole module include the name of the marker in the ``-Xuse-experimental`` option:
 
 ```console
-kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental,combinatorics.Underdog && java -jar application.jar
+$ kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental,combinatorics.Underdog && java -jar application.jar
 ```
 
 For propagating opt-in include the name of the marker in the ``-Xexperimental`` option:
 
 ```console
-kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental -Xexperimental=combinatorics.Underdog && java -jar application.jar
+$ kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental -Xexperimental=combinatorics.Underdog && java -jar application.jar
 ```
 
 The application should run without errors.
