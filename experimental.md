@@ -100,8 +100,8 @@ To use the experimental ``factorial()`` function with the propagating opt-in, in
 ```kotlin
 import combinatorics.*
 
-// The function uses the factorial() function from the library.
-// The propagating opt-in makes the function experimental itself.
+// The function uses the experimental factorial() function.
+// The propagating opt-in makes the function experimental.
 @Underdog
 fun permutations(n:Long, k:Long):Long{
     return factorial(n)/factorial(n-k)
@@ -143,7 +143,14 @@ To use the experimental ``factorial()`` function with the non-propagating opt-in
 ```kotlin
 import combinatorics.*
 
-// The function uses the factorial() function from the library.
+// The function uses the experimental factorial() function.
+// The propagating opt-in makes the function experimental.
+@Underdog
+fun permutations(n:Long, k:Long):Long{
+    return factorial(n)/factorial(n-k)
+}
+
+// The function uses the experimental permutations() and factorial() functions.
 // The non-propagating opt-in doesn't make the function experimental.
 @UseExperimental(Underdog::class)
 fun combinations(n:Long, k:Long):Long{
@@ -152,8 +159,8 @@ fun combinations(n:Long, k:Long):Long{
 
 // The functions does not require opt-in because the combinations() function hasn't become experimental.
 fun main(args: Array<String>) {
-    println("The number of combinations(10,2) is ${combinations(10,2)}.")
-    println("The number of combinations(22,6) is ${combinations(22,6)}.\n")
+    println("The number of combinations(8,2) is ${combinations(10,2)}.")
+    println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
 }
 ```
 
@@ -161,22 +168,44 @@ Compile and run the application to get:
 
 ```console
 The number of combinations(10,2) is 45.
-The number of combinations(22,6) is 38760.
+The number of combinations(20,6) is 38760.
 ```
 
 ### Opt-in for a whole module
 
 Experimental API can be enabled for a whole module rather than opting-in each time on declarations.
 
-For propagating opt-in of the whole ``library.kt`` module, include a name of the marker in the ``-Xexperimental`` option:
+Remove all the markers from your application to opt-in all functions at once:
+
+```kotlin
+import combinatorics.*
+
+fun permutations(n:Long, k:Long):Long{
+    return factorial(n)/factorial(n-k)
+}
+
+fun combinations(n:Long, k:Long):Long{
+    return permutations(n,k)/factorial(k)
+}
+
+fun main(args: Array<String>) {
+    println("The number of combinations(8,2) is ${combinations(10,2)}.")
+    println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
+}
+```
+
+For non-propagating opt-in of the whole module include the name of the marker in the ``-Xuse-experimental`` option:
 
 ```console
-$ kotlinc application.kt library.kt -include-runtime -d application.jar -Xexperimental=kotlin.Experimental,combinatorics.Underdog
+kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental,combinatorics.Underdog && java -jar application.jar
 ```
-For non-propagating opt-in include a name of the marker in the ``-Xuse-experimental`` option:
+
+For propagating opt-in include the name of the marker in the ``-Xexperimental`` option:
 
 ```console
-$ kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental,combinatorics.Underdog
+kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental -Xexperimental=combinatorics.Underdog && java -jar application.jar
 ```
+
+The application should run without errors.
 
 Such an approach works in the same way as if you have added the marker directly in your code.
