@@ -159,7 +159,7 @@ fun combinations(n:Long, k:Long):Long{
 
 // The functions does not require opt-in because the combinations() function hasn't become experimental.
 fun main(args: Array<String>) {
-    println("The number of combinations(8,2) is ${combinations(10,2)}.")
+    println("The number of combinations(10,2) is ${combinations(10,2)}.")
     println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
 }
 ```
@@ -189,7 +189,7 @@ fun combinations(n:Long, k:Long):Long{
 }
 
 fun main(args: Array<String>) {
-    println("The number of combinations(8,2) is ${combinations(10,2)}.")
+    println("The number of combinations(10,2) is ${combinations(10,2)}.")
     println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
 }
 ```
