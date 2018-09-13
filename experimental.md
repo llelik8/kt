@@ -24,7 +24,7 @@ It also illustrates the difference between propagating and non-propagating optin
 * [Using the experimental API](#using-the-experimental-api)
   * [Propagating opt-in](#propagating-opt-in)
   * [Non-propagating opt-in](#non-propagating-opt-in)
-* [Opt-in for a whole module](#opt-in-for-a-whole-module)
+  * [Opt-in for a whole module](#opt-in-for-a-whole-module)
 
 <!--- END_TOC -->
 
@@ -164,7 +164,7 @@ The number of combinations(10,2) is 45.
 The number of combinations(22,6) is 38760.
 ```
 
-## Opt-in for a whole module
+### Opt-in for a whole module
 
 Experimental API can be enabled for a whole module rather than opting-in each time on declarations.
 
