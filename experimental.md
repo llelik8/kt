@@ -20,11 +20,12 @@ It also illustrates the difference between propagating and non-propagating optin
 
 * [Creating a library](#creating-a-library)
 * [Creating an experimental API marker](#creating-an-experimental-api-marker)
-* [Compiling a library](#compiling-a-library)
+* [Marking the API experimental](#marking-the-api-experimental)
+* [Compiling the library](#compiling-the-library)
 * [Using the experimental API](#using-the-experimental-api)
   * [Propagating opt-in](#propagating-opt-in)
   * [Non-propagating opt-in](#non-propagating-opt-in)
-  * [Opt-in for a whole module](#opt-in-for-a-whole-module)
+  * [Opt-in for the whole module](#opt-in-for-the-whole-module)
 
 <!--- END_TOC -->
 
@@ -35,12 +36,11 @@ To create a library, go to your root directory, create a ``library.kt`` file, op
 ```kotlin
 package combinatorics
 
-@Underdog
 fun factorial(num:Long):Long{
     if (num <= 1) return 1 else return factorial(num - 1) * num
 }
 ```
-This is a simple library containing one function. Annotating the declared function with ``@Underdog`` marks it experimental.
+This is declaration of a package containing one function.
 
 ## Creating an experimental API marker
 
@@ -51,16 +51,26 @@ To create an experimental API marker, create a new class annotated with
 @Experimental
 annotation class Underdog
 ```
-
-The ``Underdog`` marker will be used for opting-in to the experimental API.
-
 For further notice, keep in mind that there are certain limitations for marker annotations:
 
 * The EXPRESSION and FILE targets are not allowed.
 * The retention must be BINARY.
 * Annotations must have no parameters.
 
-## Compiling a library
+## Marking the API experimental
+
+To mark the ``factorial()`` function experimental, annotate it with ``@Underdog`` on declaration:
+
+```kotlin
+package combinatorics
+
+@Underdog
+fun factorial(num:Long):Long{
+    if (num <= 1) return 1 else return factorial(num - 1) * num
+}
+```
+The ``Underdog`` marker will be used for opting-in to the function.
+## Compiling the library
 
 Considering two previous steps, the library looks like:
 
@@ -75,8 +85,7 @@ fun factorial(num:Long):Long{
     if (num <= 1) return 1 else return factorial(num - 1) * num
 }
 ```
-
-To compile a library, open console and run:
+To compile the library, open console and run:
 
 ```console
 $ kotlinc library.kt -d library.jar -Xuse-experimental=kotlin.Experimental
@@ -120,8 +129,7 @@ fun main(args: Array<String>) {
 
 }
 ```
-
-The propagating opt-in is used for both functions by marking them with ``@Underdog`` on declaration.
+The propagating opt-in is used for both functions because they are marked with ``@Underdog`` on declaration.
 
 To compile and run the application, try:
 
@@ -163,7 +171,6 @@ fun main(args: Array<String>) {
     println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
 }
 ```
-
 Compile and run the application to get:
 
 ```console
@@ -171,7 +178,7 @@ The number of combinations(10,2) is 45.
 The number of combinations(20,6) is 38760.
 ```
 
-### Opt-in for a whole module
+### Opt-in for the whole module
 
 Experimental API can be enabled for a whole module rather than opting-in each time on declarations.
 
@@ -193,19 +200,16 @@ fun main(args: Array<String>) {
     println("The number of combinations(20,6) is ${combinations(20,6)}.\n")
 }
 ```
-
 For non-propagating opt-in of the whole module include the name of the marker in the ``-Xuse-experimental`` option:
 
 ```console
 $ kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental,combinatorics.Underdog && java -jar application.jar
 ```
-
 For propagating opt-in include the name of the marker in the ``-Xexperimental`` option:
 
 ```console
 $ kotlinc application.kt library.kt -include-runtime -d application.jar -Xuse-experimental=kotlin.Experimental -Xexperimental=combinatorics.Underdog && java -jar application.jar
 ```
-
 The application should run without errors.
 
 Such an approach works in the same way as if you have added the marker directly in your code.
